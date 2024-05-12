@@ -15,31 +15,19 @@ class Orden extends Model
         return $this->belongsTo(Grupo::class);
     }
 
-    // Scope para filtrar por estado
     public function scopeByStatus($query, $status)
     {
-        if ($status) {
-            return $query->where('status', $status);
-        }
-        return $query;
+        return $status ? $query->where('status', $status) : $query;
     }
 
-    // Scope para filtrar por group_id
     public function scopeByGroupId($query, $group_id)
     {
-        if ($group_id) {
-            return $query->where('group_id', $group_id);
-        }
-        return $query;
+        return $group_id ? $query->where('group_id', $group_id) : $query;
     }
 
-    // Scope para filtrar por amount
     public function scopeByAmount($query, $amount)
     {
-        if ($amount) {
-            return $query->where('amount', $amount);
-        }
-        return $query;
+        return $amount ? $query->where('amount', $amount) : $query;
     }
 
 }
