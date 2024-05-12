@@ -6,16 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+  
     public function up()
     {
         Schema::create('ordenes', function (Blueprint $table) {
             $table->id();
-            $table->string('status');
+            $table->string('status');// si bien podria ser enum, se considera que en algun momento se puede agreagar un nuevo estado entonces preferia que sea string
             $table->double('amount');
             $table->unsignedBigInteger('group_id');
             $table->foreign('group_id')->references('id')->on('grupos')->onDelete('cascade');
@@ -23,11 +19,7 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+   
     public function down()
     {
         Schema::dropIfExists('ordenes');
