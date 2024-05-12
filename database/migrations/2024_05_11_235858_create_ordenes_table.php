@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('ordenes', function (Blueprint $table) {
             $table->id();
-            $table->enum('status', ['pending', 'completed']);
+            $table->string('status');
             $table->double('amount');
             $table->unsignedBigInteger('group_id');
             $table->foreign('group_id')->references('id')->on('grupos')->onDelete('cascade');
