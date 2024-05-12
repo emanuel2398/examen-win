@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('ordenes/{id}', [OrdenController::class, 'getOrdenDetalle']);
+Route::get('orders/filter/{status?}/{group_id?}/{amount?}', [OrdenController::class, 'filterOrders']);
