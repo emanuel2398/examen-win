@@ -19,7 +19,6 @@ class OrdenController extends Controller
         }
         
         $ordenDetalle = $this->getOrdenDetallePorId($orderId, $token); // Obtiene el detalle de la orden por ID utilizando el token
-       
         if ($ordenDetalle['order']['status'] == "processing" && !Orden::find($ordenDetalle['order']['id'])) { // Verifica el estado y la existencia de la orden
             $this->createOrden($ordenDetalle); // Crea la orden si está en estado "processing" y no existe
             $message = 'Detalle de la orden obtenido y creada correctamente.';
@@ -60,7 +59,7 @@ class OrdenController extends Controller
         $ordenDetalle = json_decode($response->getBody(), true);
         return $ordenDetalle;
     }
-
+     //Requerimiento B
     private function createOrden($ordenDetalle){
         Orden::create([
             'id'=>$ordenDetalle['order']['id'],
@@ -69,11 +68,46 @@ class OrdenController extends Controller
             'group_id' => $ordenDetalle['order']['group_id']
         ]);
     }
-    public function filterOrders($status=null, $group_id=null, $amount=null)
+    //Requerimiento C
+    public function filtrarOrdenes($status=null, $group_id=null, $amount=null)
     {
-         $filteredOrders = Orden::query()->byStatus($status)->byGroupId($group_id)  //Se usa scopes para filtrar
+         $ordenesFiltradas = Orden::query()->byStatus($status)->byGroupId($group_id)  //Se usa scopes para filtrar
          ->byAmount($amount)->get();
          
-        return response()->json($filteredOrders);         
+        return response()->json($ordenesFiltradas);         
+    }
+    //Requerimiento D
+    public function totalOrdenes(){
+
+        $cantidadOrdenes = Orden::count(); // Obtiene la cantidad total de órdenes
+        $sumaMontos = Orden::sum('amount'); // Obtiene la suma del campo "amount" de todas las órdenes
+        $response = [
+            'cantidad_total_ordenes' => $cantidadOrdenes,
+            'suma_montos_ordenes' => $sumaMontos,
+        ];
+        return response()->json($response);
+    }
+
+    public function guardarTodasOrdenes($orderId)
+    {
+        // Realiza la solicitud de login para obtener el Bearer Token
+        $token = $this->getBearerToken();
+
+        if (!$token) { // Verificar si se recibió el token
+            return response()->json(['error' => 'No se pudo obtener Bearer Token'], 500);
+        }
+        
+        $ordenDetalle = $this->getOrdenDetallePorId($orderId, $token); // Obtiene el detalle de la orden por ID utilizando el token
+        if (!Orden::find($ordenDetalle['order']['id'])) { // Verifica la existencia de la orden
+            $this->createOrden($ordenDetalle); // Crea la orden si está en estado "processing" y no existe
+            $message = 'Detalle de la orden obtenido y creada correctamente.';
+        }else {
+            $message = 'La orden ya existe.';
+        }
+        $response = [
+            'orden' => $ordenDetalle,
+            'message' => $message
+        ];
+        return response()->json($response); // Devuelve la respuesta JSON
     }
 }

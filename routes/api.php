@@ -19,5 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('ordenes/{id}', [OrdenController::class, 'getOrdenDetalle']);
-Route::get('orders/filter/{status?}/{group_id?}/{amount?}', [OrdenController::class, 'filterOrders']);
+Route::get('ordenes/{id}', [OrdenController::class, 'getOrdenDetalle']);//Requerimiento A y B
+Route::get('ordenes/filtro/{status?}/{group_id?}/{amount?}', [OrdenController::class, 'filtrarOrdenes']);//Requerimiento C
+Route::get('ordenes/total/suma', [OrdenController::class, 'totalOrdenes']); //Requerimiento D
+Route::get('ordenes/guardar/{id}', [OrdenController::class, 'guardarTodasOrdenes']);//Requerimiento E
