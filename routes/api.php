@@ -27,4 +27,4 @@ Route::get('ordenes/total', [OrdenController::class, 'totalOrdenes']); //Requeri
 
 Route::post('ordenes/guardar/{id}', [OrdenController::class, 'guardarTodasOrdenes']);//Requerimiento E
 
-Route::post('ordenes/eliminar/{id}', [OrdenController::class, 'eliminarOrden']);//Requerimiento F
+Route::delete('ordenes/eliminar/{id}', [OrdenController::class, 'eliminarOrden']);//Requerimiento F
